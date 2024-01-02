@@ -55,7 +55,7 @@ export class ApiService {
       throw new UnauthorizedException('No token provided');
     }
 
-    let userId;
+    let userId: string;
     try {
       const decoded = this.jwtService.verify(token);
       userId = decoded.id;
@@ -73,6 +73,8 @@ export class ApiService {
 
     const horoscope = getChineseZodiac(createProfileDto.birthday);
     const zodiac = getWesternZodiac(createProfileDto.birthday);
+    const heightWithUnit = `${createProfileDto.height} cm`;
+    const weightWithUnit = `${createProfileDto.weight} kg`;
 
     const updatedUser = await this.userModel.findOneAndUpdate(
       { _id: userId },
@@ -80,6 +82,8 @@ export class ApiService {
         ...createProfileDto,
         horoscope: horoscope,
         zodiac: zodiac,
+        height: heightWithUnit,
+        weight: weightWithUnit,
       },
       { new: true, runValidators: true },
     );
