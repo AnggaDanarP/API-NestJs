@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Req, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../api/schemas/user.schema';
 import * as bcrypt from 'bcryptjs';
@@ -7,6 +7,10 @@ import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from '../api/dto/register.dto';
 import { LoginDto } from '../api/dto/login.dto';
 import { CreateProfileDto } from './dto/createProfile.dto';
+import { ProfileDto } from './dto/profile.dto';
+import { getWesternZodiac } from './utils/zodiac.utils';
+import { getChineseZodiac } from './utils/horoscope.utils';
+import { Request } from 'express';
 
 @Injectable()
 export class ApiService {
@@ -43,8 +47,46 @@ export class ApiService {
   }
 
   async createProfile(
+    @Req() req: Request,
     createProfileDto: CreateProfileDto,
-  ): Promise<CreateProfileDto> {
-    const { gender, birthday, height, weight } = createProfileDto;
+  ): Promise<ProfileDto> {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      throw new UnauthorizedException('No token provided');
+    }
+
+    let userId;
+    try {
+      const decoded = this.jwtService.verify(token);
+      userId = decoded.id;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
+    if (!userId) {
+      throw new UnauthorizedException('User not authenticated');
+    }
+
+    const existingUser = await this.userModel.findOne({ _id: userId });
+    if (!existingUser) {
+      throw new Error('User not found');
+    }
+
+    const horoscope = getChineseZodiac(createProfileDto.birthday);
+    const zodiac = getWesternZodiac(createProfileDto.birthday);
+
+    const updatedUser = await this.userModel.findOneAndUpdate(
+      { _id: userId },
+      {
+        ...createProfileDto,
+        horoscope: horoscope,
+        zodiac: zodiac,
+      },
+      { new: true, runValidators: true },
+    );
+
+    if (!updatedUser) {
+      throw new Error('Error updating user profile');
+    }
+    return updatedUser;
   }
 }

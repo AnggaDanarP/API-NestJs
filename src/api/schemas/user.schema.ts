@@ -60,6 +60,6 @@ export class User {
   height: string;
 
   @Prop()
-  wight: string;
+  weight: string;
 }
 export const UserSchema = SchemaFactory.createForClass(User);
