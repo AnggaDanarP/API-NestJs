@@ -1,35 +1,35 @@
 import { Zodiac } from '../schemas/user.schema';
 
-export function getZodiac(date: Date): Zodiac {
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
+const zodiacSigns = [
+  { sign: Zodiac.Aries, start: '03-21', end: '04-19' },
+  { sign: Zodiac.Taurus, start: '04-20', end: '05-20' },
+  { sign: Zodiac.Gemini, start: '05-21', end: '06-20' },
+  { sign: Zodiac.Cancer, start: '06-21', end: '07-22' },
+  { sign: Zodiac.Leo, start: '07-23', end: '08-22' },
+  { sign: Zodiac.Virgo, start: '08-23', end: '09-22' },
+  { sign: Zodiac.Libra, start: '09-23', end: '10-22' },
+  { sign: Zodiac.Scorpio, start: '10-23', end: '11-21' },
+  { sign: Zodiac.Sagittarius, start: '11-22', end: '12-21' },
+  { sign: Zodiac.Capricorn, start: '12-22', end: '01-19' },
+  { sign: Zodiac.Aquarius, start: '01-20', end: '02-18' },
+  { sign: Zodiac.Pisces, start: '02-19', end: '03-20' },
+];
 
-  switch (month) {
-    case 1:
-      return day <= 19 ? Zodiac.Capricorn : Zodiac.Aquarius;
-    case 2:
-      return day <= 18 ? Zodiac.Aquarius : Zodiac.Pisces;
-    case 3:
-      return day <= 20 ? Zodiac.Pisces : Zodiac.Aries;
-    case 4:
-      return day <= 19 ? Zodiac.Aries : Zodiac.Taurus;
-    case 5:
-      return day <= 20 ? Zodiac.Taurus : Zodiac.Gemini;
-    case 6:
-      return day <= 20 ? Zodiac.Gemini : Zodiac.Cancer;
-    case 7:
-      return day <= 22 ? Zodiac.Cancer : Zodiac.Leo;
-    case 8:
-      return day <= 22 ? Zodiac.Leo : Zodiac.Virgo;
-    case 9:
-      return day <= 22 ? Zodiac.Virgo : Zodiac.Libra;
-    case 10:
-      return day <= 22 ? Zodiac.Libra : Zodiac.Scorpio;
-    case 11:
-      return day <= 21 ? Zodiac.Scorpio : Zodiac.Sagittarius;
-    case 12:
-      return day <= 21 ? Zodiac.Sagittarius : Zodiac.Capricorn;
-    default:
-      return Zodiac.Unknown;
+export function getWesternZodiac(date: Date): string {
+  const month = date.getMonth() + 1; // JavaScript months are 0-indexed
+  const day = date.getDate();
+  const formattedDate = `${month.toString().padStart(2, '0')}-${day
+    .toString()
+    .padStart(2, '0')}`;
+
+  for (const zodiac of zodiacSigns) {
+    if (
+      (formattedDate >= zodiac.start && formattedDate <= '12-31') ||
+      (formattedDate >= '01-01' && formattedDate <= zodiac.end)
+    ) {
+      return zodiac.sign;
+    }
   }
+
+  return 'Unknown';
 }
