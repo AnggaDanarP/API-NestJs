@@ -2,7 +2,7 @@ import { IsNotEmpty, IsString, IsEnum } from 'class-validator';
 import { Horoscope } from '../schemas/user.schema';
 import { Zodiac } from '../schemas/user.schema';
 
-export class CreateProfileDto {
+export class ProfileDto {
   @IsNotEmpty()
   @IsString()
   readonly name: string;
