@@ -94,4 +94,29 @@ export class ApiService {
     }
     return updatedUser as ProfileDto;
   }
+
+  async getProfile(@Req() req: Request): Promise<ProfileDto> {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      throw new UnauthorizedException('No token provided');
+    }
+
+    let userId: string;
+    try {
+      const decoded = this.jwtService.verify(token);
+      userId = decoded.id;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
+    if (!userId) {
+      throw new UnauthorizedException('User not authenticated');
+    }
+
+    const user = await this.userModel.findById(userId).select('-password');
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    return user as ProfileDto;
+  }
 }

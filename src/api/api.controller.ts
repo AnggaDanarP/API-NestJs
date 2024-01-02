@@ -37,4 +37,9 @@ export class ApiController {
       throw new UnauthorizedException(error.message);
     }
   }
+
+  @Get('/getProfile')
+  getProfile(@Req() req: Request): Promise<ProfileDto> {
+    return this.apiService.getProfile(req as any);
+  }
 }
