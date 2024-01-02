@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateProfileDto {
   @IsNotEmpty()
@@ -10,8 +10,8 @@ export class CreateProfileDto {
   readonly gender: string;
 
   @IsNotEmpty()
-  @IsString()
-  readonly birthday: string;
+  @IsDateString()
+  readonly birthday: Date;
 
   @IsNotEmpty()
   @IsNumber()

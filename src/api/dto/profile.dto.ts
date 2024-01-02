@@ -1,4 +1,6 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsEnum } from 'class-validator';
+import { Horoscope } from '../schemas/user.schema';
+import { Zodiac } from '../schemas/user.schema';
 
 export class CreateProfileDto {
   @IsNotEmpty()
@@ -14,18 +16,18 @@ export class CreateProfileDto {
   readonly birthday: string;
 
   @IsNotEmpty()
-  @IsString()
-  readonly horoscope: string;
+  @IsEnum(Horoscope, { message: 'Please input correct category' })
+  readonly horoscope: Horoscope;
+
+  @IsNotEmpty()
+  @IsEnum(Zodiac, { message: 'Please input correct category' })
+  readonly zodiac: Zodiac;
 
   @IsNotEmpty()
   @IsString()
-  readonly zodiac: string;
+  readonly height: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  readonly height: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  readonly weight: number;
+  @IsString()
+  readonly weight: string;
 }
