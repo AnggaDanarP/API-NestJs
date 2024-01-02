@@ -1,16 +1,18 @@
-const zodiacAnimals = [
-  'Rat',
-  'Ox',
-  'Tiger',
-  'Rabbit',
-  'Dragon',
-  'Snake',
-  'Horse',
-  'Goat',
-  'Monkey',
-  'Rooster',
-  'Dog',
-  'Pig',
+import { Horoscope } from '../schemas/user.schema';
+
+const horoscope = [
+  Horoscope.Rat,
+  Horoscope.Ox,
+  Horoscope.Tiger,
+  Horoscope.Rabbit,
+  Horoscope.Dragon,
+  Horoscope.Snake,
+  Horoscope.Horse,
+  Horoscope.Goat,
+  Horoscope.Monkey,
+  Horoscope.Rooster,
+  Horoscope.Dog,
+  Horoscope.Pig,
 ];
 
 export function getChineseZodiac(date: Date): string {
@@ -24,5 +26,5 @@ export function getChineseZodiac(date: Date): string {
   }
 
   const zodiacIndex = (year - 4) % 12; // 4 is the base year for Rat
-  return zodiacAnimals[zodiacIndex];
+  return horoscope[zodiacIndex];
 }

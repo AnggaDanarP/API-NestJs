@@ -16,6 +16,21 @@ export enum Zodiac {
   Unknown = 'Unknown',
 }
 
+export enum Horoscope {
+  Rat = 'Rat',
+  Ox = 'Ox',
+  Tiger = 'Tiger',
+  Rabbit = 'Rabbit',
+  Dragon = 'Dragon',
+  Snake = 'Snake',
+  Horse = 'Horse',
+  Goat = 'Goat',
+  Monkey = 'Monkey',
+  Rooster = 'Rooster',
+  Dog = 'Dog',
+  Pig = 'Pig',
+}
+
 @Schema({
   timestamps: true,
 })
@@ -36,7 +51,7 @@ export class User {
   birthday: string;
 
   @Prop()
-  horoscope: string;
+  horoscope: Horoscope;
 
   @Prop()
   zodiac: Zodiac;
