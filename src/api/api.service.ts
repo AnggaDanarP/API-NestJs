@@ -89,7 +89,7 @@ export class ApiService {
       {
         name: isNewName,
         gender: gender,
-        birthday: setObjectbirthday,
+        birthday: birthday,
         horoscope: setHoroscope,
         zodiac: setZodiac,
         height: heightWithUnit,
@@ -120,7 +120,8 @@ export class ApiService {
       throw new UnauthorizedException('User not authenticated');
     }
 
-    const user = await this.userModel.findById(userId).select('-password');
+    const getUser = await this.userModel.findById(userId);
+    const user = await this.profileModel.findOne({ name: getUser.name });
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
