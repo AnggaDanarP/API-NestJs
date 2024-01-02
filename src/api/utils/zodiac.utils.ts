@@ -57,7 +57,7 @@ const zodiacSigns = [
     end: { month: 11, day: 21 },
   },
   {
-    sign: Zodiac.Sagittarius,
+    sign: Zodiac.Sagitarius,
     start: { month: 11, day: 22 },
     end: { month: 12, day: 21 },
   },

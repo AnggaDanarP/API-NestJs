@@ -9,7 +9,7 @@ export enum Zodiac {
   Virgo = 'Virgo',
   Libra = 'Libra',
   Scorpio = 'Scorpio',
-  Sagittarius = 'Sagittarius',
+  Sagitarius = 'Sagitarius',
   Capricorn = 'Capricorn',
   Aquarius = 'Aquarius',
   Pisces = 'Pisces',
