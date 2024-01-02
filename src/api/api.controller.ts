@@ -26,7 +26,7 @@ export class ApiController {
     return this.apiService.login(loginDto);
   }
 
-  @Post('createProfile')
+  @Post('/createProfile')
   async createProfile(
     @Req() req: Request,
     @Body() createProfileDto: CreateProfileDto,

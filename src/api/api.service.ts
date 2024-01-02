@@ -71,8 +71,9 @@ export class ApiService {
       throw new Error('User not found');
     }
 
-    const horoscope = getChineseZodiac(createProfileDto.birthday);
-    const zodiac = getWesternZodiac(createProfileDto.birthday);
+    const birthday = new Date(createProfileDto.birthday);
+    const horoscope = getChineseZodiac(birthday);
+    const zodiac = getWesternZodiac(birthday);
     const heightWithUnit = `${createProfileDto.height} cm`;
     const weightWithUnit = `${createProfileDto.weight} kg`;
 
