@@ -6,6 +6,7 @@ import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from '../api/dto/register.dto';
 import { LoginDto } from '../api/dto/login.dto';
+import { CreateProfileDto } from './dto/createProfile.dto';
 
 @Injectable()
 export class ApiService {
@@ -39,5 +40,11 @@ export class ApiService {
     }
     const token = this.jwtService.sign({ id: isUser._id });
     return { token };
+  }
+
+  async createProfile(
+    createProfileDto: CreateProfileDto,
+  ): Promise<CreateProfileDto> {
+    const { gender, birthday, height, weight } = createProfileDto;
   }
 }
