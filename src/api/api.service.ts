@@ -11,12 +11,16 @@ import { ProfileDto } from './dto/profile.dto';
 import { getWesternZodiac } from './utils/zodiac.utils';
 import { getChineseZodiac } from './utils/horoscope.utils';
 import { Request } from 'express';
+import { Profile } from './schemas/profile.schema';
+import { UpdateProfileDto } from './dto/updateProfile.dto';
 
 @Injectable()
 export class ApiService {
   constructor(
     @InjectModel(User.name)
     private userModel: Model<User>,
+    @InjectModel(Profile.name)
+    private profileModel: Model<Profile>,
     private jwtService: JwtService,
   ) {}
 
@@ -71,28 +75,32 @@ export class ApiService {
       throw new Error('User not found');
     }
 
-    const birthday = new Date(createProfileDto.birthday);
-    const horoscope = getChineseZodiac(birthday);
-    const zodiac = getWesternZodiac(birthday);
-    const heightWithUnit = `${createProfileDto.height} cm`;
-    const weightWithUnit = `${createProfileDto.weight} kg`;
+    const { name, gender, birthday, height, weight } = createProfileDto;
 
-    const updatedUser = await this.userModel.findOneAndUpdate(
-      { _id: userId },
+    const isNewName = existingUser.name !== name ? name : existingUser.name;
+    const setObjectbirthday = new Date(birthday);
+    const setHoroscope = getChineseZodiac(setObjectbirthday);
+    const setZodiac = getWesternZodiac(setObjectbirthday);
+    const heightWithUnit = `${height} cm`;
+    const weightWithUnit = `${weight} kg`;
+
+    const createUser = await this.profileModel.create(
+      { name: existingUser.name },
       {
-        ...createProfileDto,
-        horoscope: horoscope,
-        zodiac: zodiac,
+        name: isNewName,
+        gender: gender,
+        birthday: setObjectbirthday,
+        horoscope: setHoroscope,
+        zodiac: setZodiac,
         height: heightWithUnit,
         weight: weightWithUnit,
       },
-      { new: true, runValidators: true },
     );
 
-    if (!updatedUser) {
+    if (!createUser) {
       throw new Error('Error updating user profile');
     }
-    return updatedUser as unknown as ProfileDto;
+    return createUser as unknown as ProfileDto;
   }
 
   async getProfile(@Req() req: Request): Promise<ProfileDto> {
@@ -118,5 +126,54 @@ export class ApiService {
     }
 
     return user as unknown as ProfileDto;
+  }
+
+  async updateProfile(
+    @Req() req: Request,
+    updateProfileDto: UpdateProfileDto,
+  ): Promise<ProfileDto> {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      throw new UnauthorizedException('No token provided');
+    }
+
+    let userId: string;
+    try {
+      const decoded = this.jwtService.verify(token);
+      userId = decoded.id;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
+    if (!userId) {
+      throw new UnauthorizedException('User not authenticated');
+    }
+
+    const existingUser = await this.userModel.findOne({ _id: userId });
+    if (!existingUser) {
+      throw new Error('User not found');
+    }
+
+    const birthday = new Date(updateProfileDto.birthday);
+    const horoscope = getChineseZodiac(birthday);
+    const zodiac = getWesternZodiac(birthday);
+    const heightWithUnit = `${updateProfileDto.height} cm`;
+    const weightWithUnit = `${updateProfileDto.weight} kg`;
+
+    const updatedUser = await this.profileModel.findOneAndUpdate(
+      { name: existingUser.name },
+      {
+        ...updateProfileDto,
+        horoscope: horoscope,
+        zodiac: zodiac,
+        height: heightWithUnit,
+        weight: weightWithUnit,
+      },
+      { new: true, runValidators: true },
+    );
+
+    if (!updatedUser) {
+      throw new Error('Error updating user profile');
+    }
+    return updatedUser as unknown as ProfileDto;
   }
 }
