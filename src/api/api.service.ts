@@ -92,6 +92,6 @@ export class ApiService {
     if (!updatedUser) {
       throw new Error('Error updating user profile');
     }
-    return updatedUser;
+    return updatedUser as ProfileDto;
   }
 }
