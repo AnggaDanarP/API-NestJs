@@ -1,4 +1,4 @@
-import { Horoscope } from '../schemas/user.schema';
+import { Horoscope } from '../schemas/profile.schema';
 
 const horoscope = [
   Horoscope.Rat,

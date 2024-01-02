@@ -1,4 +1,4 @@
-import { Zodiac } from '../schemas/user.schema';
+import { Zodiac } from '../schemas/profile.schema';
 
 const zodiacSigns = [
   {

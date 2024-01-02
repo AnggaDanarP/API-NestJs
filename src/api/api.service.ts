@@ -92,7 +92,7 @@ export class ApiService {
     if (!updatedUser) {
       throw new Error('Error updating user profile');
     }
-    return updatedUser as ProfileDto;
+    return updatedUser as unknown as ProfileDto;
   }
 
   async getProfile(@Req() req: Request): Promise<ProfileDto> {
@@ -117,6 +117,6 @@ export class ApiService {
       throw new UnauthorizedException('User not found');
     }
 
-    return user as ProfileDto;
+    return user as unknown as ProfileDto;
   }
 }

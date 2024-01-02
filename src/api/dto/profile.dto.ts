@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, IsEnum } from 'class-validator';
-import { Horoscope } from '../schemas/user.schema';
-import { Zodiac } from '../schemas/user.schema';
+import { Horoscope } from '../schemas/profile.schema';
+import { Zodiac } from '../schemas/profile.schema';
 
 export class ProfileDto {
   @IsNotEmpty()
