@@ -1,7 +1,13 @@
-import { IsNotEmpty, IsString, IsEnum, IsEmpty } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsEnum,
+  IsEmpty,
+  IsDateString,
+} from 'class-validator';
 import { Horoscope } from '../schemas/profile.schema';
 import { Zodiac } from '../schemas/profile.schema';
-import { User } from '../schemas/user.schema';
+import { User } from 'src/api/schemas/user.schema';
 
 export class ProfileDto {
   @IsEmpty({ message: 'You cannot pass user id' })
@@ -16,7 +22,7 @@ export class ProfileDto {
   readonly gender: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsDateString()
   readonly birthday: string;
 
   @IsNotEmpty()

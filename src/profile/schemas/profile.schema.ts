@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { User } from './user.schema';
+import { User } from 'src/api/schemas/user.schema';
 import mongoose from 'mongoose';
 
 export enum Zodiac {

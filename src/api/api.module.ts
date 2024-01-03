@@ -3,7 +3,6 @@ import { ApiController } from './api.controller';
 import { ApiService } from './api.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from '../api/schemas/user.schema';
-import { ProfileSchema } from './schemas/profile.schema';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -23,10 +22,7 @@ import { JwtStrategy } from './jwt.strategy';
         };
       },
     }),
-    MongooseModule.forFeature([
-      { name: 'User', schema: UserSchema },
-      { name: 'Profile', schema: ProfileSchema },
-    ]),
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
   ],
   controllers: [ApiController],
   providers: [ApiService, JwtStrategy],

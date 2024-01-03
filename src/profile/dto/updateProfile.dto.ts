@@ -5,7 +5,7 @@ import {
   IsNumber,
   IsString,
 } from 'class-validator';
-import { User } from '../schemas/user.schema';
+import { User } from 'src/api/schemas/user.schema';
 
 export class UpdateProfileDto {
   @IsEmpty({ message: 'You cannot pass user id' })
