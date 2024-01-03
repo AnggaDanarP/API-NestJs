@@ -4,8 +4,10 @@ import {
   IsNotEmpty,
   IsNumber,
   IsString,
+  IsEnum,
 } from 'class-validator';
 import { User } from 'src/api/schemas/user.schema';
+import { Gender } from '../schemas/profile.schema';
 
 export class CreateProfileDto {
   @IsEmpty({ message: 'You cannot pass user id' })
@@ -16,8 +18,8 @@ export class CreateProfileDto {
   readonly name: string;
 
   @IsNotEmpty()
-  @IsString()
-  readonly gender: string;
+  @IsEnum(Gender, { message: 'Please input correct category' })
+  readonly gender: Gender;
 
   @IsNotEmpty()
   @IsDateString()

@@ -7,6 +7,7 @@ import {
 } from 'class-validator';
 import { Horoscope } from '../schemas/profile.schema';
 import { Zodiac } from '../schemas/profile.schema';
+import { Gender } from '../schemas/profile.schema';
 import { User } from 'src/api/schemas/user.schema';
 
 export class ProfileDto {
@@ -18,8 +19,8 @@ export class ProfileDto {
   readonly name: string;
 
   @IsNotEmpty()
-  @IsString()
-  readonly gender: string;
+  @IsEnum(Gender, { message: 'Please input correct category' })
+  readonly gender: Gender;
 
   @IsNotEmpty()
   @IsDateString()

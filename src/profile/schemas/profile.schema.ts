@@ -32,6 +32,11 @@ export enum Horoscope {
   Dog = 'Dog',
   Pig = 'Pig',
 }
+
+export enum Gender {
+  Male = 'Male',
+  Female = 'Female',
+}
 @Schema({
   timestamps: true, // This will automatically add createdAt and updatedAt fields
 })
@@ -39,8 +44,8 @@ export class Profile {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   user: User;
 
-  @Prop()
-  gender: string;
+  @Prop({ enum: Gender })
+  gender: Gender;
 
   @Prop()
   birthday: string;
