@@ -51,28 +51,12 @@ export class ApiService {
   }
 
   async createProfile(
-    @Req() req: Request,
     createProfileDto: CreateProfileDto,
+    user: User,
   ): Promise<ProfileDto> {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) {
-      throw new UnauthorizedException('No token provided');
-    }
-
-    let userId: string;
-    try {
-      const decoded = this.jwtService.verify(token);
-      userId = decoded.id;
-    } catch (error) {
-      throw new UnauthorizedException('Invalid token');
-    }
-    if (!userId) {
-      throw new UnauthorizedException('User not authenticated');
-    }
-
-    const existingUser = await this.userModel.findOne({ _id: userId });
-    if (!existingUser) {
-      throw new Error('User not found');
+    const existingProfile = await this.profileModel.findOne({ user: user._id });
+    if (existingProfile) {
+      throw new Error('User already has a profile');
     }
 
     const { gender, birthday, height, weight } = createProfileDto;
@@ -83,49 +67,35 @@ export class ApiService {
     const heightWithUnit = `${height} cm`;
     const weightWithUnit = `${weight} kg`;
 
-    const createUser = await this.profileModel.create(
-      { name: existingUser.name },
-      {
-        gender: gender,
-        birthday: birthday,
+    try {
+      const profile = await this.profileModel.create({
+        user: user._id,
+        gender,
+        birthday,
         horoscope: setHoroscope,
         zodiac: setZodiac,
         height: heightWithUnit,
         weight: weightWithUnit,
-      },
-    );
+      });
 
-    if (!createUser) {
-      throw new Error('Error updating user profile');
+      return profile as unknown as ProfileDto;
+    } catch (error) {
+      throw new Error('Error creating user profile: ' + error.message);
     }
-    return createUser as unknown as ProfileDto;
   }
 
-  // !TODO: still need update for retrive the data
-  async getProfile(@Req() req: Request): Promise<ProfileDto> {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) {
-      throw new UnauthorizedException('No token provided');
+  async getProfile(user: User): Promise<ProfileDto> {
+    const existingProfile = await this.profileModel.findOne({ user: user._id });
+    if (!existingProfile) {
+      throw new Error('Please create your profile');
     }
 
-    let userId: string;
-    try {
-      const decoded = this.jwtService.verify(token);
-      userId = decoded.id;
-    } catch (error) {
-      throw new UnauthorizedException('Invalid token');
-    }
-    if (!userId) {
-      throw new UnauthorizedException('User not authenticated');
-    }
-
-    const getUser = await this.userModel.findById(userId);
-    const user = await this.profileModel.findOne({ name: getUser.name });
+    const userProfile = await this.profileModel.findOne(user._id);
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
 
-    return user as unknown as ProfileDto;
+    return userProfile as unknown as ProfileDto;
   }
 
   async updateProfile(

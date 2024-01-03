@@ -9,7 +9,11 @@ import { User } from '../schemas/user.schema';
 
 export class CreateProfileDto {
   @IsEmpty({ message: 'You cannot pass user id' })
-  user: User;
+  user: User['_id'];
+
+  @IsNotEmpty()
+  @IsString()
+  readonly name: string;
 
   @IsNotEmpty()
   @IsString()

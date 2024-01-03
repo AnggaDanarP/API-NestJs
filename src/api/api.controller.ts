@@ -5,14 +5,14 @@ import {
   Post,
   Req,
   UnauthorizedException,
-  UseGuards,
+  // UseGuards,
 } from '@nestjs/common';
 import { ApiService } from './api.service';
 import { RegisterDto } from '../api/dto/register.dto';
 import { LoginDto } from '../api/dto/login.dto';
 import { ProfileDto } from './dto/profile.dto';
 import { CreateProfileDto } from './dto/createProfile.dto';
-import { AuthGuard } from '@nestjs/passport';
+// import { AuthGuard } from '@nestjs/passport';
 
 @Controller('api')
 export class ApiController {
@@ -29,20 +29,22 @@ export class ApiController {
   }
 
   @Post('/createProfile')
-  @UseGuards(AuthGuard())
   async createProfile(
     @Req() req: Request,
     @Body() createProfileDto: CreateProfileDto,
   ): Promise<ProfileDto> {
     try {
-      return await this.apiService.createProfile(req as any, createProfileDto);
+      return await this.apiService.createProfile(
+        createProfileDto as any,
+        req as any,
+      );
     } catch (error) {
       throw new UnauthorizedException(error.message);
     }
   }
 
   @Get('/getProfile')
-  @UseGuards(AuthGuard())
+  // @UseGuards(AuthGuard())
   getProfile(@Req() req: Request): Promise<ProfileDto> {
     return this.apiService.getProfile(req as any);
   }
