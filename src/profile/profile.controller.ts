@@ -43,6 +43,7 @@ export class ProfileController {
   }
 
   @Put('/updateProfile')
+  @UseGuards(AuthGuard())
   async updateProfile(
     @Req() req: Request,
     @Body() updateProfileDto: UpdateProfileDto,
